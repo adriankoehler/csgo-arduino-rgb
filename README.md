@@ -1,5 +1,5 @@
 # csgo-gsi-arduino-rgb
-Tutorial how to combine CS:GO Game State Integration + Node.js + Arduino + LED RGB Strip.
+Combine CS:GO Game State Integration + Node.js + Arduino + NeoPixels RGB-LED Strip.
 
 Script based on [Shaunidiot's CSGOGSI](https://github.com/shaunidiot/node-csgo-gsi)
 
@@ -29,19 +29,15 @@ To run script, open CMD, type:
 
 ---
 # Arduino setup
-In this project I used:
 
-	- Arduino Board
-	- 3x MOSFET Transistors irf610
-	- 3x 10KΩ Resistors
-	- +12V LED RGB Strip(2 meters)
-	- +12VDC Power Supply
-  
-You can find plenty solutions how to connect led rgb strip to an arduino, connect parts like you prefer, i'll only show [photo](https://lh3.googleusercontent.com/wibiVkf2Rwxl3z8L8gnN3qBezsBPpEpFRTxQeA4-kbGhAWk2W3x1BciRGg_P-CpRRJli-XsdpAP_DEcc3GrWXm5VA2RU02j1qHmgIw29E27mEGMCDplM3j5e-0HhZc36hywpSSlTjISSWiwaKzQAmjrnvEzJw1Y4LO4NWu1MAnwrP4nr8khkaxgAVc7_zaN_TnrqXQk4s2jj4O7E3oOdtDgTyEL7zA1P6NNsXuS5c7pfGIU5X8FenzaG8NBr89PK5b_xatQ0jacKl8j-IIhvSt8nqKaiP3JgKpYDoRv0Ak3hjh8pVq434sSK-QlShABjZcLeOfCIP9dnHQ0Hc427pgi4IjFOnBJR5VREWt9s6cEVpzkq3yuMQLOKmeHltOYwo1scHdzXUPIgktD9lsqHkI_vGYlmy0_wee2zg92Ma5-fLb5JRDhS7FzJics_yCdkuWjsH7UrTYHqkZSsLGFYItAJeRejeK01w6u8T8Kgq6dpw-qiT6KcpZobkTHxGF2xmnM4f0pkoxLt1rH6T69-mAr4G66DwneJKHEkidJVaL6Sy7SIOO9Ay7V7SIAsdLf5TuWuFdsV=w1167-h950) how i've did this.
+`npm install node-pixel`
+`npm install -g nodebots-interchange`
 
-After connecting everything together, open Arduino Software(Arduino IDE), go to File > Examples > Firmata > StandardFirmata, upload this to arduino and close program.
+Plug in your arduino
 
-In **server.js** file, configure R, G and B pins, which you connected to arduino from led strip.
+`interchange install git+https://github.com/ajfisher/node-pixel -a uno --firmata`
+
+In **server.js** file, configure data pins, stripLength.
 
 ---
 # CS:GO Events Colors
@@ -66,4 +62,4 @@ You can change colors of CS:GO events in **server.js** file, but remeber to use 
 
 [rwaldron/johnny-five](https://github.com/rwaldron/johnny-five)
 
-[EmergingTechnologyAdvisors/node-serialport](https://github.com/EmergingTechnologyAdvisors/node-serialport)
+https://chrisruppel.com/blog/arduino-johnny-five-neopixel/
