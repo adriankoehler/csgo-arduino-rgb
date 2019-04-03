@@ -32,15 +32,73 @@ board.on("ready", function() {
     gamma: 2.8,
   });
 
-  // Just like DOM-ready for web developers.
   strip.on("ready", function() {
     // Set the entire strip to pink.
-    strip.color('#903');
-
-    // Send instructions to NeoPixel.
+    strip.color('#990033');
     strip.show();
   });
-	
+
+  strip.color(startupColor);
+  strip.show();
+
+	var bombPlanted = false;
+
+	/*This event is added by me by modyfing main index.js of node-csgo-gsi package in(node_modules\node-csgo-gsi\index.js)),
+	so if you install manually node-csgo-gsi by using npm, without replacing with downloaded index.js, this event won't work.*/
+	gsi.on('noGame', function(data) {
+	    if (data == 'none'){
+        strip.color(csNoGame);
+        strip.show();
+	    }
+	});
+
+	gsi.on('gamePhase', function(data) {
+	    if (data == 'warmup'){
+        strip.color(csWarmup);
+        strip.show();
+	    }
+	});
+
+	gsi.on('roundPhase', function(data) {
+	    if (data == 'live'){
+	    	if (bombPlanted != true){
+          strip.color(csRoundLive);
+          strip.show();
+	    	}
+	    }
+	    if (data == 'freezetime'){
+        strip.color(csFreezetime);
+        strip.show();
+	    }
+	    if(data == 'over'){
+	    	bombPlanted = false;
+	    }
+	});
+
+	gsi.on('roundWinTeam', function(data) {
+	    if (data == 'CT'){
+	    	// led.stop();
+	    	// led.color(csCtWin);
+        strip.color(csCtWin);
+        strip.show();
+	    }
+	    if (data == 'T'){
+        strip.color(csTtWin);
+        strip.show();
+	    }
+	});
+
+	gsi.on('bombTimeStart', function(time) {
+		bombPlanted = true;
+    strip.color(csBombPlanted);
+    strip.show();
+	});
+
+	this.on("exit", function() {
+    strip.color('#000');
+    strip.show();
+  });
+
 });
 
 
