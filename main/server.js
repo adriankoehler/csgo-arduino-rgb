@@ -15,15 +15,16 @@ var csBombTimeBelowFive = "FF2411";
 var CSGOGSI = require('node-csgo-gsi');
 var gsi = new CSGOGSI();
 
-//var five = require("johnny-five");
-//var board = new five.Board();
-
-//---
 pixel = require("node-pixel");
 five = require("johnny-five");
 
 var board = new five.Board();
 var strip = null;
+
+function delay(ms) {
+   ms += new Date().getTime();
+   while (new Date() < ms){}
+}
 
 board.on("ready", function() {
   strip = new pixel.Strip({
@@ -33,11 +34,11 @@ board.on("ready", function() {
     gamma: 2.8,
   });
 
-  strip.on("ready", function() {
-    // Set the entire strip to pink.
-    strip.color('#990033');
-    strip.show();
-  });
+  // strip.on("ready", function() {
+  //   // Set the entire strip to pink.
+  //   strip.color('#990033');
+  //   strip.show();
+  // });
 
   strip.color(startupColor);
   strip.show();
@@ -48,6 +49,7 @@ board.on("ready", function() {
 	so if you install manually node-csgo-gsi by using npm, without replacing with downloaded index.js, this event won't work.*/
 	gsi.on('noGame', function(data) {
 	    if (data == 'none'){
+        console.log("noGame");
         strip.color(csNoGame);
         strip.show();
 	    }
@@ -56,6 +58,7 @@ board.on("ready", function() {
 // ---- WARMUP ----
 	gsi.on('gamePhase', function(data) {
 	    if (data == 'warmup'){
+        console.log("warmup");
         strip.color(csWarmup);
         strip.show();
 	    }
@@ -65,21 +68,25 @@ board.on("ready", function() {
 	gsi.on('roundPhase', function(data) {
 	    if (data == 'live'){
 	    	if (bombPlanted != true){
+          console.log("csRoundLive");
           strip.color(csRoundLive);
           strip.show();
 	    	}
 	    }
 	    if (data == 'freezetime'){
+        console.log("freezetime");
         strip.color(csFreezetime);
         strip.show();
 	    }
 	    if(data == 'over'){
+        console.log("round over");
 	    	bombPlanted = false;
 	    }
 	});
 
 // ---- CT/T WIN ----
 	gsi.on('roundWinTeam', function(data) {
+    console.log("roundWinTeam");
 	    if (data == 'CT'){
 	    	// led.stop();
 	    	// led.color(csCtWin);
@@ -94,119 +101,56 @@ board.on("ready", function() {
 
 // ---- BOMBTIMER ----
 	gsi.on('bombTimeStart', function(time) {
+    console.log("bombTimeStart");
     // todo: count down pixel by pixel, 10s: yellow, 5s: red
     //       blink between each tick?
     // läuft durch for schleife egal ob defused oder nicht?
-
-    // 115s/83leds = 1.3855 leds pro sec auschalten
 
     // csBombPlanted: #FFA41C
     // red: #FF2411
     // green: #1CFF4B
     // blue: #189FFF
-    
-    console.log(time);
+
+    console.log("bombtime: " + time);
 		bombPlanted = true;
 
     strip.color(csBombPlanted);
     strip.show();
 
-    while (time>0) {
-      console.log(time);
-      var currentColor = csBombPlanted;
-      if(time<10) {currentColor = csBombTimeBelowTen;}
-      if(time<5) {currentColor = csBombTimeBelowFive;}
+    // 29
+    // bombtime(inloop): 39.45199990272522
+    // while (time>0) {
+    //   console.log("bombtime(inloop): " + time);
+    //   var currentColor = csBombPlanted;
+    //   if(time<10) {currentColor = csBombTimeBelowTen;}
+    //   if(time<5) {currentColor = csBombTimeBelowFive;}
+    //
+    //   var numLedsOn = Math.ceil(0.7217*time);
+    //   console.log(numLedsOn);
+    //
+    //   for (var i = 0; i <= numLedsOn; i++) {
+    //     strip.pixel(i).color(csBombPlanted);
+    //   }
+    //   strip.show();
+    //
+    //   // delay(500);
+    // }
 
-      var numLedsOn = Math.ceil(1.3855*time);
-      console.log(numLedsOn);
-
-      for (var i = 0; i <= numLedsOn; i++) {
-        strip.pixel(i).color(csBombPlanted);
-      }
+    for (var i = 0; i <= time*2; i++) {
+      if(i<20) {}
+      if(i<10) {}
+      strip.pixel(i).color(csBombPlanted);
       strip.show();
-
       delay(500);
     }
-
-    // for (var i = 0; i <= stripLength; i++) {
-    //   if()
-    //   strip.pixel(i).color(csBombPlanted);
-    //   strip.show();
-    //   delay(500);
-    // }
 
 	});
 
 // EXIT csgo-arduino program
 	this.on("exit", function() {
+    console.log("exit prgm");
     strip.color('#000');
     strip.show();
   });
 
 });
-
-
-// board.on("ready", function() {
-//
-// 	var led = new five.Led.RGB({
-// 		pins: {
-// 			red: redPin,
-// 			green: greenPin,
-// 			blue: bluePin
-// 		}
-// 	});
-//
-// 	led.color(startupColor);
-//
-// 	var bombPlanted = false;
-//
-// 	/*This event is added by me by modyfing main index.js of node-csgo-gsi package in(node_modules\node-csgo-gsi\index.js)),
-// 	so if you install manually node-csgo-gsi by using npm, without replacing with downloaded index.js, this event won't work.*/
-// 	gsi.on('noGame', function(data) {
-// 	    if (data == 'none'){
-// 	    	led.color(csNoGame);
-// 	    }
-// 	});
-//
-// 	gsi.on('gamePhase', function(data) {
-// 	    if (data == 'warmup'){
-// 	    	led.color(csWarmup);
-// 	    }
-// 	});
-//
-// 	gsi.on('roundPhase', function(data) {
-// 	    if (data == 'live'){
-// 	    	if (bombPlanted != true){
-// 	    		led.color(csRoundLive);
-// 	    	}
-// 	    }
-// 	    if (data == 'freezetime'){
-// 	    	led.color(csFreezetime);
-// 	    }
-// 	    if(data == 'over'){
-// 	    	bombPlanted = false;
-// 	    }
-// 	});
-//
-// 	gsi.on('roundWinTeam', function(data) {
-// 	    if (data == 'CT'){
-// 	    	led.stop();
-// 	    	led.color(csCtWin);
-// 	    }
-// 	    if (data == 'T'){
-// 	    	led.stop();
-// 	    	led.color(csTtWin);
-// 	    }
-// 	});
-//
-// 	gsi.on('bombTimeStart', function(time) {
-// 		bombPlanted = true;
-// 		led.color(csBombPlanted);
-// 	});
-//
-// 	this.on("exit", function() {
-// 		led.stop();
-//     	led.off();
-//   	});
-//
-// });
