@@ -8,8 +8,9 @@ var csRoundLive = "#00ff00"; //Round Live
 var csFreezetime = "#ffffff"; //Freezetime
 var csCtWin = "#0000ff"; //Counter terrorist win
 var csTtWin = "#ffff00"; //Terrorist win
-var csBombPlanted = "#ff0000"; //Bomb planted
-
+var csBombPlanted = "#FFA41C"; //Bomb planted
+var csBombTimeBelowTen = "#ff761c";
+var csBombTimeBelowFive = "FF2411";
 
 var CSGOGSI = require('node-csgo-gsi');
 var gsi = new CSGOGSI();
@@ -52,6 +53,7 @@ board.on("ready", function() {
 	    }
 	});
 
+// ---- WARMUP ----
 	gsi.on('gamePhase', function(data) {
 	    if (data == 'warmup'){
         strip.color(csWarmup);
@@ -59,6 +61,7 @@ board.on("ready", function() {
 	    }
 	});
 
+// ---- LIVE/FREEZETIME/OVER ----
 	gsi.on('roundPhase', function(data) {
 	    if (data == 'live'){
 	    	if (bombPlanted != true){
@@ -75,6 +78,7 @@ board.on("ready", function() {
 	    }
 	});
 
+// ---- CT/T WIN ----
 	gsi.on('roundWinTeam', function(data) {
 	    if (data == 'CT'){
 	    	// led.stop();
@@ -88,12 +92,52 @@ board.on("ready", function() {
 	    }
 	});
 
+// ---- BOMBTIMER ----
 	gsi.on('bombTimeStart', function(time) {
+    // todo: count down pixel by pixel, 10s: yellow, 5s: red
+    //       blink between each tick?
+    // läuft durch for schleife egal ob defused oder nicht?
+
+    // 115s/83leds = 1.3855 leds pro sec auschalten
+
+    // csBombPlanted: #FFA41C
+    // red: #FF2411
+    // green: #1CFF4B
+    // blue: #189FFF
+    
+    console.log(time);
 		bombPlanted = true;
+
     strip.color(csBombPlanted);
     strip.show();
+
+    while (time>0) {
+      console.log(time);
+      var currentColor = csBombPlanted;
+      if(time<10) {currentColor = csBombTimeBelowTen;}
+      if(time<5) {currentColor = csBombTimeBelowFive;}
+
+      var numLedsOn = Math.ceil(1.3855*time);
+      console.log(numLedsOn);
+
+      for (var i = 0; i <= numLedsOn; i++) {
+        strip.pixel(i).color(csBombPlanted);
+      }
+      strip.show();
+
+      delay(500);
+    }
+
+    // for (var i = 0; i <= stripLength; i++) {
+    //   if()
+    //   strip.pixel(i).color(csBombPlanted);
+    //   strip.show();
+    //   delay(500);
+    // }
+
 	});
 
+// EXIT csgo-arduino program
 	this.on("exit", function() {
     strip.color('#000');
     strip.show();
