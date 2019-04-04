@@ -113,8 +113,9 @@ board.on("ready", function() {
 
     console.log("bombtime: " + time);
 		bombPlanted = true;
+    var currentColor = csBombPlanted;
 
-    strip.color(csBombPlanted);
+    strip.color(currentColor);
     strip.show();
 
     // 29
@@ -137,10 +138,18 @@ board.on("ready", function() {
     // }
 
     for (var i = 0; i <= time*2; i++) {
-      if(i<20) {}
-      if(i<10) {}
-      strip.pixel(i).color(csBombPlanted);
-      strip.show();
+        if(i<20) {currentColor = csBombTimeBelowTen;}
+        if(i<10) {currentColor = csBombTimeBelowFive;}
+
+        var numLedsOn = Math.ceil(0.7217*time);
+        console.log("leds on: " + numLedsOn);
+
+        for (var i = 0; i <= numLedsOn; i++) {
+          strip.color("#000");
+          strip.pixel(i).color(currentColor);
+        }
+        strip.show();
+
       delay(500);
     }
 
