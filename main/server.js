@@ -9,8 +9,8 @@ var csFreezetime = "#ffffff"; //Freezetime
 var csCtWin = "#0000ff"; //Counter terrorist win
 var csTtWin = "#ffff00"; //Terrorist win
 var csBombPlanted = "#FFA41C"; //Bomb planted
-var csBombTimeBelowTen = "#ff761c";
-var csBombTimeBelowFive = "FF2411";
+var csBombTimeBelowTen = "#FF761C";
+var csBombTimeBelowFive = "#FF2411";
 
 var CSGOGSI = require('node-csgo-gsi');
 var gsi = new CSGOGSI();
@@ -107,31 +107,36 @@ board.on("ready", function() {
 		bombPlanted = true;
     var currentColor = csBombPlanted;
 
-    strip.color(currentColor);
-    strip.show();
+    // strip.color(currentColor);
+    // strip.show();
 
     var timeElapsed = 0
-    //   var currentColor = csBombPlanted;
-    //   if(time<10) {currentColor = csBombTimeBelowTen;}
-    //   if(time<5) {currentColor = csBombTimeBelowFive;}
-
     var myVar = setInterval(myTimer, 1000);
 
     function myTimer() {
       timeElapsed++;
-      var numLedsOn = Math.ceil(0.7217*timeElapsed);
-      console.log(numLedsOn);
-
-      for (var i = 0; i <= numLedsOn; i++) {
-        strip.pixel(i).color(csBombPlanted);
-      }
-      strip.show();
+      var numLedsOn = Math.ceil(2.075*timeElapsed);
+      console.log("time elapsed: " + timeElapsed + " - ledsOn: " + numLedsOn);
 
       if (timeElapsed >= 30) {
-        strip.color(csBombTimeBelowTen);
-        strip.show;
-        myStopFunction();
+        currentColor=csBombTimeBelowTen;
+        console.log("below 10");
       }
+      if (timeElapsed >= 35) {
+        currentColor=csBombTimeBelowFive;
+        console.log("below 5");
+      }
+
+      strip.color("#000");
+      for (var i = 0; i <= numLedsOn; i++) {
+        //         strip.pixel(i).color(currentColor);
+//                       ^
+//
+// TypeError: Cannot read property 'color' of undefined
+
+        strip.pixel(i).color(currentColor);
+      }
+      strip.show();
     }
 
     function myStopFunction() {
