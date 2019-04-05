@@ -8,9 +8,9 @@ var csRoundLive = "#00ff00"; //Round Live
 var csFreezetime = "#ffffff"; //Freezetime
 var csCtWin = "#0000ff"; //Counter terrorist win
 var csTtWin = "#ffff00"; //Terrorist win
-var csBombPlanted = "#FFA41C"; //Bomb planted
-var csBombTimeBelowTen = "#FF761C";
-var csBombTimeBelowFive = "#FF2411";
+var csBombPlanted = "#FFA41C"; //Bomb planted (orange)
+var csBombTimeBelowTen = "#FF761C"; //Bombtimer <10s (orange-red)
+var csBombTimeBelowFive = "#FF2411"; //Bombtimer <5s (red)
 
 var CSGOGSI = require('node-csgo-gsi');
 var gsi = new CSGOGSI();
@@ -80,6 +80,7 @@ board.on("ready", function() {
 	    }
 	    if(data == 'over'){
         console.log("round over");
+        stopBombtimer(timerId);
 	    	bombPlanted = false;
 	    }
 	});
@@ -88,8 +89,6 @@ board.on("ready", function() {
 	gsi.on('roundWinTeam', function(data) {
     console.log("roundWinTeam");
 	    if (data == 'CT'){
-	    	// led.stop();
-	    	// led.color(csCtWin);
         strip.color(csCtWin);
         strip.show();
 	    }
@@ -100,6 +99,12 @@ board.on("ready", function() {
 	});
 
 // ---- BOMBTIMER ----
+  var timerId;
+
+  function stopBombtimer() {
+    clearInterval(timerId);
+  }
+
 	gsi.on('bombTimeStart', function(time) {
     console.log("bombTimeStart");
 
@@ -107,11 +112,9 @@ board.on("ready", function() {
 		bombPlanted = true;
     var currentColor = csBombPlanted;
 
-    // strip.color(currentColor);
-    // strip.show();
-
+    //todo: make interval .5s to increase accuracy, create extra event for 10s/5s warning
     var timeElapsed = 0
-    var myVar = setInterval(myTimer, 1000);
+    timerId = setInterval(myTimer, 1000);
 
     function myTimer() {
       timeElapsed++;
@@ -130,54 +133,13 @@ board.on("ready", function() {
       strip.color("#000");
       for (var i = 0; i <= numLedsOn; i++) {
         //         strip.pixel(i).color(currentColor);
-//                       ^
-//
-// TypeError: Cannot read property 'color' of undefined
+        //                       ^
+        // TypeError: Cannot read property 'color' of undefined
 
         strip.pixel(i).color(currentColor);
       }
       strip.show();
     }
-
-    function myStopFunction() {
-      clearInterval(myVar);
-    }
-
-    // 29
-    // bombtime(inloop): 39.45199990272522
-    // while (time>0) {
-    //   console.log("bombtime(inloop): " + time);
-    //   var currentColor = csBombPlanted;
-    //   if(time<10) {currentColor = csBombTimeBelowTen;}
-    //   if(time<5) {currentColor = csBombTimeBelowFive;}
-    //
-    //   var numLedsOn = Math.ceil(0.7217*time);
-    //   console.log(numLedsOn);
-    //
-    //   for (var i = 0; i <= numLedsOn; i++) {
-    //     strip.pixel(i).color(csBombPlanted);
-    //   }
-    //   strip.show();
-    //
-    //   // delay(500);
-    // }
-
-    // for (var i = 0; i <= time*2; i++) {
-    //     if(i<20) {currentColor = csBombTimeBelowTen;}
-    //     if(i<10) {currentColor = csBombTimeBelowFive;}
-    //
-    //     var numLedsOn = Math.ceil(0.7217*time);
-    //     console.log("leds on: " + numLedsOn);
-    //
-    //     for (var i = 0; i <= numLedsOn; i++) {
-    //       strip.color("#000");
-    //       strip.pixel(i).color(currentColor);
-    //     }
-    //     strip.show();
-    //
-    //   delay(500);
-    // }
-
 	});
 
 // EXIT csgo-arduino program
