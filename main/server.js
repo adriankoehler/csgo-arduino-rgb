@@ -136,7 +136,13 @@ board.on("ready", function() {
         //                       ^
         // TypeError: Cannot read property 'color' of undefined
 
-        strip.pixel(i).color(currentColor);
+        try {
+          strip.pixel(i).color(currentColor);
+        }
+        catch(Exception e) {
+          console.log("failed to set color, stop timer: " + e);
+          stopBombtimer(timerId);
+        }
       }
       strip.show();
     }
