@@ -102,14 +102,6 @@ board.on("ready", function() {
 // ---- BOMBTIMER ----
 	gsi.on('bombTimeStart', function(time) {
     console.log("bombTimeStart");
-    // todo: count down pixel by pixel, 10s: yellow, 5s: red
-    //       blink between each tick?
-    // läuft durch for schleife egal ob defused oder nicht?
-
-    // csBombPlanted: #FFA41C
-    // red: #FF2411
-    // green: #1CFF4B
-    // blue: #189FFF
 
     console.log("bombtime: " + time);
 		bombPlanted = true;
@@ -117,6 +109,34 @@ board.on("ready", function() {
 
     strip.color(currentColor);
     strip.show();
+
+    var timeElapsed = 0
+    //   var currentColor = csBombPlanted;
+    //   if(time<10) {currentColor = csBombTimeBelowTen;}
+    //   if(time<5) {currentColor = csBombTimeBelowFive;}
+
+    var myVar = setInterval(myTimer, 1000);
+
+    function myTimer() {
+      timeElapsed++;
+      var numLedsOn = Math.ceil(0.7217*timeElapsed);
+      console.log(numLedsOn);
+
+      for (var i = 0; i <= numLedsOn; i++) {
+        strip.pixel(i).color(csBombPlanted);
+      }
+      strip.show();
+
+      if (timeElapsed >= 30) {
+        strip.color(csBombTimeBelowTen);
+        strip.show;
+        myStopFunction();
+      }
+    }
+
+    function myStopFunction() {
+      clearInterval(myVar);
+    }
 
     // 29
     // bombtime(inloop): 39.45199990272522
@@ -137,21 +157,21 @@ board.on("ready", function() {
     //   // delay(500);
     // }
 
-    for (var i = 0; i <= time*2; i++) {
-        if(i<20) {currentColor = csBombTimeBelowTen;}
-        if(i<10) {currentColor = csBombTimeBelowFive;}
-
-        var numLedsOn = Math.ceil(0.7217*time);
-        console.log("leds on: " + numLedsOn);
-
-        for (var i = 0; i <= numLedsOn; i++) {
-          strip.color("#000");
-          strip.pixel(i).color(currentColor);
-        }
-        strip.show();
-
-      delay(500);
-    }
+    // for (var i = 0; i <= time*2; i++) {
+    //     if(i<20) {currentColor = csBombTimeBelowTen;}
+    //     if(i<10) {currentColor = csBombTimeBelowFive;}
+    //
+    //     var numLedsOn = Math.ceil(0.7217*time);
+    //     console.log("leds on: " + numLedsOn);
+    //
+    //     for (var i = 0; i <= numLedsOn; i++) {
+    //       strip.color("#000");
+    //       strip.pixel(i).color(currentColor);
+    //     }
+    //     strip.show();
+    //
+    //   delay(500);
+    // }
 
 	});
 
