@@ -1,0 +1,20 @@
+{
+  "name": "main",
+  "version": "1.0.0",
+  "description": "asd",
+  "main": "\u001b[A\u001b[Bserver.js",
+  "dependencies": {
+    "delay": "^4.1.0",
+    "johnny-five": "^1.0.0",
+    "node-csgo-gsi": "^0.0.1",
+    "node-pixel": "^0.10.1",
+    "serialport": "^7.1.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node server",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

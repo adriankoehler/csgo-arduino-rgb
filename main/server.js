@@ -1,7 +1,7 @@
 var dataPin = 6;
 var stripLength = 83
 
-var startupColor = "#00ff00"; //Color after lanuching script
+var startupColor = "#00bdaa"; //Color after lanuching script
 var csNoGame = "#ffffff"; //Main Menu or after game exit
 var csWarmup = "#ff00ff"; //Warmup
 var csRoundLive = "#00ff00"; //Round Live
@@ -112,20 +112,20 @@ board.on("ready", function() {
 		bombPlanted = true;
     var currentColor = csBombPlanted;
 
-    //todo: make interval .5s to increase accuracy, create extra event for 10s/5s warning
-    var timeElapsed = 0
-    timerId = setInterval(myTimer, 1000);
+    var timeElapsed = (40*2) - (time*2);
+    console.log("bombtime: " + time + " -- " + timeElapsed);
+    timerId = setInterval(myTimer, 500);
 
     function myTimer() {
-      timeElapsed++;
+      timeElapsed += 0.5;
       var numLedsOn = Math.ceil(2.075*timeElapsed);
       console.log("time elapsed: " + timeElapsed + " - ledsOn: " + numLedsOn);
 
-      if (timeElapsed >= 30) {
+      if (timeElapsed >= (30)) {
         currentColor=csBombTimeBelowTen;
         console.log("below 10");
       }
-      if (timeElapsed >= 35) {
+      if (timeElapsed >= (35)) {
         currentColor=csBombTimeBelowFive;
         console.log("below 5");
       }
@@ -139,7 +139,7 @@ board.on("ready", function() {
         try {
           strip.pixel(i).color(currentColor);
         }
-        catch(Exception e) {
+        catch(e) {
           console.log("failed to set color, stop timer: " + e);
           stopBombtimer(timerId);
         }
