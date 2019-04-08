@@ -3,11 +3,11 @@ var stripLength = 83
 
 var startupColor = "#00bdaa"; //Color after lanuching script
 var csNoGame = "#ffffff"; //Main Menu or after game exit
-var csWarmup = "#ff00ff"; //Warmup
+var csWarmup = "#ff00ff"; //Warmup --nicht grad lila
 var csRoundLive = "#00ff00"; //Round Live
 var csFreezetime = "#ffffff"; //Freezetime
 var csCtWin = "#0000ff"; //Counter terrorist win
-var csTtWin = "#ffff00"; //Terrorist win
+var csTtWin = "#ffdd00"; //Terrorist win --mehr orange
 var csBombPlanted = "#FFA41C"; //Bomb planted (orange)
 var csBombTimeBelowTen = "#FF761C"; //Bombtimer <10s (orange-red)
 var csBombTimeBelowFive = "#FF2411"; //Bombtimer <5s (red)
@@ -107,12 +107,12 @@ board.on("ready", function() {
 
 	gsi.on('bombTimeStart', function(time) {
     console.log("bombTimeStart");
-
     console.log("bombtime: " + time);
+
 		bombPlanted = true;
     var currentColor = csBombPlanted;
 
-    var timeElapsed = (40*2) - (time*2);
+    var timeElapsed = (40*2) - (time*2) + 0.2;
     console.log("bombtime: " + time + " -- " + timeElapsed);
     timerId = setInterval(myTimer, 500);
 
