@@ -31,6 +31,7 @@ To run script, open CMD, type:
 # Arduino setup
 
 `npm install node-pixel`
+
 `npm install -g nodebots-interchange`
 
 Plug in your arduino
