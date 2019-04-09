@@ -1,11 +1,11 @@
 var dataPin = 6;
 var stripLength = 83
 
-var startupColor = "#00bdaa"; //Color after lanuching script
+var startupColor = "#ffffff"; //Color after lanuching script
 var csNoGame = "#ffffff"; //Main Menu or after game exit
 var csWarmup = "#ff00ff"; //Warmup --nicht grad lila
 var csRoundLive = "#00ff00"; //Round Live
-var csFreezetime = "#ffffff"; //Freezetime
+var csFreezetime = "#93FFFF"; //Freezetime
 var csCtWin = "#0000ff"; //Counter terrorist win
 var csTtWin = "#ffdd00"; //Terrorist win --mehr orange
 var csBombPlanted = "#FFA41C"; //Bomb planted (orange)
@@ -34,26 +34,29 @@ board.on("ready", function() {
     gamma: 2.8,
   });
 
-  // strip.on("ready", function() {
-  //   // Set the entire strip to pink.
-  //   strip.color('#990033');
-  //   strip.show();
-  // });
-
   strip.color(startupColor);
   strip.show();
 
-	var bombPlanted = false;
+    var bombPlanted = false;
 
-	/*This event is added by me by modyfing main index.js of node-csgo-gsi package in(node_modules\node-csgo-gsi\index.js)),
-	so if you install manually node-csgo-gsi by using npm, without replacing with downloaded index.js, this event won't work.*/
-	gsi.on('noGame', function(data) {
-	    if (data == 'none'){
+    gsi.on('noGame', function(data) {
+        if (data == 'none'){
         console.log("noGame");
         strip.color(csNoGame);
         strip.show();
-	    }
-	});
+        }
+    });
+
+// ---- PLAYER TEAM CT/T ----
+  gsi.on('playerTeam', function(data) {
+    //console.log("team emitted " + data);
+      if (data == 'CT'){
+          console.log("is on ct");
+      }
+      if (data == 'T'){
+          console.log("is on t");
+      }
+  });
 
 // ---- WARMUP ----
 	gsi.on('gamePhase', function(data) {
@@ -146,9 +149,9 @@ board.on("ready", function() {
 
 // EXIT csgo-arduino program
 	this.on("exit", function() {
-    console.log("exit prgm");
     strip.color('#000');
     strip.show();
+    console.log("exit prgm");
   });
 
 });

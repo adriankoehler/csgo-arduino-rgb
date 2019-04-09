@@ -19,7 +19,7 @@ function CSGOGSI() {
     require('events').EventEmitter.call(this);
     server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
         var addr = server.address();
-        console.log("Serwer CS:GO GSI wystartowal: ", addr.address + ":" + addr.port);
+        console.log("Server CS:GO GSI started: ", addr.address + ":" + addr.port);
     });
 
     app.post('/', function (req, res) {
@@ -33,6 +33,11 @@ function CSGOGSI() {
     this._c4Interval;
 }
 
+
+
+// DO NOT EDIT - HAS NO EFFECT
+
+
 CSGOGSI.prototype.process = function(data) {
     var self = this;
 
@@ -44,24 +49,28 @@ CSGOGSI.prototype.process = function(data) {
         this.emit('gameTscore', data.map.team_t_score);
     }
 
+    if (typeof data.player.team !== 'undefined') {
+        this.emit('playerTeam', data.player.team);
+    }
+
     if (typeof data.round !== 'undefined') {
 
         var maxTime = 0;
         this.emit('roundPhase', data.round.phase);
         switch(data.round.phase) {
             case 'live':
-            maxTime = 115;
-            break;
+                maxTime = 115;
+                break;
             case 'freezetime':
-            maxTime = 15;
-            break;
+                maxTime = 15;
+                break;
             case 'over':
-            if (this._isBombPlanted) {
-                this._isBombPlanted = false;
-                clearInterval(this._c4Interval);
-            }
-            this.emit('roundWinTeam', data.round.win_team);
-            break;
+                if (this._isBombPlanted) {
+                    this._isBombPlanted = false;
+                    clearInterval(this._c4Interval);
+                }
+                this.emit('roundWinTeam', data.round.win_team);
+                break;
         }
 
         if (typeof data.round.bomb !== 'undefined') {
@@ -69,19 +78,19 @@ CSGOGSI.prototype.process = function(data) {
             this.emit('bombState', data.round.bomb);
             switch(data.round.bomb) {
                 case 'planted':
-                if (!this._isBombPlanted) {
-                    this._isBombPlanted = true;
-                    var timeleft = 40 - (new Date().getTime() / 1000 - data.provider.timestamp);
-                    this.emit('bombTimeStart', timeleft);
-                    this.c4Countdown(timeleft);
-                }
-                break;
+                    if (!this._isBombPlanted) {
+                        this._isBombPlanted = true;
+                        var timeleft = 40 - (new Date().getTime() / 1000 - data.provider.timestamp);
+                        this.emit('bombTimeStart', timeleft);
+                        this.c4Countdown(timeleft);
+                    }
+                    break;
 
                 case 'defused':
                 case 'exploded':
-                this._isBombPlanted = false;
-                clearInterval(this._c4Interval);
-                break;
+                    this._isBombPlanted = false;
+                    clearInterval(this._c4Interval);
+                    break;
             }
         }
     }
