@@ -132,10 +132,6 @@ board.on("ready", function() {
 
       strip.color("#000");
       for (var i = 0; i <= numLedsOn; i++) {
-        //         strip.pixel(i).color(currentColor);
-        //                       ^
-        // TypeError: Cannot read property 'color' of undefined
-
         try {
           strip.pixel(i).color(currentColor);
         }
