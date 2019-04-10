@@ -1,16 +1,18 @@
 var dataPin = 6;
 var stripLength = 83
 
-var startupColor = "#ffffff"; //Color after lanuching script
-var csNoGame = "#ffffff"; //Main Menu or after game exit
-var csWarmup = "#ff00ff"; //Warmup --nicht grad lila
-var csRoundLive = "#00ff00"; //Round Live
-var csFreezetime = "#93FFFF"; //Freezetime
-var csCtWin = "#0000ff"; //Counter terrorist win
-var csTtWin = "#ffdd00"; //Terrorist win --mehr orange
+var startupColor = "#FFFFFF"; //Color after lanuching script
+var csNoGame = "#FFFFFF"; //Main Menu or after game exit
+var csWarmup = "#FFF1D0"; //Warmup (orange-ish white)
+var csRoundLive = "#00FF00"; //Round Live, std
+var csPlayerT = "#FFB364"; //Round Live, Player is T --dunkler?
+var csPlayerCT = "#5779C0"; //Round Live, Player is CT
+var csFreezetime = "#DAFFFF"; //Freezetime
+var csCtWin = "#1010FF"; //Counter terrorist win
+var csTtWin = "#FFBA00"; //Terrorist win
 var csBombPlanted = "#FFA41C"; //Bomb planted (orange)
-var csBombTimeBelowTen = "#FF761C"; //Bombtimer <10s (orange-red)
-var csBombTimeBelowFive = "#FF2411"; //Bombtimer <5s (red)
+var csBombTimeBelowTen = "#FF701C"; //Bombtimer <10s (orange-red)
+var csBombTimeBelowFive = "#FF2211"; //Bombtimer <5s (red)
 
 var CSGOGSI = require('node-csgo-gsi');
 var gsi = new CSGOGSI();
@@ -52,9 +54,11 @@ board.on("ready", function() {
     //console.log("team emitted " + data);
       if (data == 'CT'){
           console.log("is on ct");
+          csRoundLive = csPlayerCT;
       }
       if (data == 'T'){
           console.log("is on t");
+          csRoundLive = csPlayerCT;
       }
   });
 
@@ -139,7 +143,7 @@ board.on("ready", function() {
           strip.pixel(i).color(currentColor);
         }
         catch(e) {
-          console.log("failed to set color, stop timer: " + e);
+          console.log("failed to set color, stop timer");
           stopBombtimer(timerId);
         }
       }
