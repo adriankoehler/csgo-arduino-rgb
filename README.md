@@ -1,7 +1,7 @@
 # csgo-gsi-arduino-rgb
-Combine CS:GO Game State Integration + Node.js + Arduino + NeoPixels RGB-LED Strip.
+CS:GO Game State Integration + Node.js + Arduino + Individually Adressable RGB-LED Strip.
 
-Script based on [Shaunidiot's CSGOGSI](https://github.com/shaunidiot/node-csgo-gsi)
+Script based on [Shaunidiot's CSGOGSI](https://github.com/shaunidiot/node-csgo-gsi) and [maciejb2k arduino-rgb](https://github.com/maciejb2k/csgo-gsi-arduino-rgb).
 
 ---
 # Scripts setup
