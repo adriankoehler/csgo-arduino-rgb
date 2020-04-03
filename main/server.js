@@ -50,7 +50,7 @@ board.on("ready", function() {
     });
 
 // ---- PLAYER TEAM CT/T ----
-  gsi.on('playerTeam', function(data) {
+/*  gsi.on('playerTeam', function(data) {
       if (data == 'CT'){
           console.log("is on ct");
           csRoundLive = csPlayerCT;
@@ -59,7 +59,7 @@ board.on("ready", function() {
           console.log("is on t");
           csRoundLive = csPlayerT;
       }
-  });
+  });*/
 
 // ---- WARMUP ----
 	gsi.on('gamePhase', function(data) {
@@ -81,8 +81,8 @@ board.on("ready", function() {
 	    }
 	    if (data == 'freezetime'){
             console.log("freezetime");
-            //strip.color(csFreezetime);
-            //strip.show();
+            strip.color(csFreezetime);
+            strip.show();
 	    }
 	    if(data == 'over'){
             console.log("round over");
