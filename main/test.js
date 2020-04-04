@@ -1,5 +1,6 @@
 var dataPin = 6;
-var stripLength = 83;
+var stripLength = 30;
+// var stripLength = 83;
 
 pixel = require("node-pixel");
 five = require("johnny-five");
@@ -21,16 +22,19 @@ board.on("ready", function() {
   });
 
   strip.on("ready", function() {
+//    strip.color('#FDDDCC');
 
-	strip.color('#FDDDCC');
+// for (var i = 0; i < stripLength; i++) {
+//   strip.pixel(i).color("#FF0000");
+// 	strip.show();
+//   delay(500);
+// }
+
+  strip.color("#222")
+  strip.pixel(0).color("#550055")
+  strip.shift(1, pixel.FORWARD, true); // the amount of LEDs to shift, the direction, and whether the pattern should wrap
+
   strip.show();
-
-  // for (var i = 0; i < stripLength; i++) {
-  //   strip.pixel(i).color("#FF00");
-  // 	strip.show();
-  //   console.log(i);
-  //   delay(500);
-  // }
 
   });
 })

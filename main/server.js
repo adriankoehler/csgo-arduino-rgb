@@ -15,7 +15,8 @@ var csBombTimeBelowTen = "#FF701C"; //Bombtimer <10s (orange-red)
 var csBombTimeBelowFive = "#FF1201"; //Bombtimer <5s (red)
 
 var CSGOGSI = require('node-csgo-gsi');
-var gsi = new CSGOGSI();
+// var gsi = new CSGOGSI();
+var gsi = new CSGOGSI("http://192.168.178.47");
 
 pixel = require("node-pixel");
 five = require("johnny-five");
@@ -95,6 +96,7 @@ board.on("ready", function() {
 	gsi.on('roundWinTeam', function(data) {
         console.log("roundWinTeam");
             if (data == 'CT'){
+              // TODO bei sieg animation
                 strip.color(csCtWin);
                 strip.show();
             }
@@ -111,6 +113,10 @@ board.on("ready", function() {
     clearInterval(timerId);
   }
 
+  gsi.on('bombState', function(state_string) {
+    console.log("bombb has been " + state_string);
+  }
+
 	gsi.on('bombTimeStart', function(time) {
     console.log("bombTimeStart");
     console.log("bombtime: " + time);
@@ -118,14 +124,17 @@ board.on("ready", function() {
 		bombPlanted = true;
     var currentColor = csBombPlanted;
 
+    // 3-0.5s random delay: https://i.imgur.com/3Leaeqa.png
     var timeElapsed = (40*2) - (time*2) + 0.2;
     console.log("bombtime: " + time + " -- " + timeElapsed);
     timerId = setInterval(myTimer, 500);
 
     function myTimer() {
       timeElapsed += 0.5;
-      var numLedsOn = Math.ceil(2.075*timeElapsed);
+      var numLedsOn = Math.ceil((stripLength\40)*timeElapsed);
       console.log("time elapsed: " + timeElapsed + " - ledsOn: " + numLedsOn);
+
+      //gsi.on('bombTimeLeft', function(time)
 
       if (timeElapsed >= (30)) {
         currentColor=csBombTimeBelowTen;
