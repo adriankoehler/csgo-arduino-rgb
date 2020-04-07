@@ -27,7 +27,6 @@ To run script, open CMD, type:
 
 `node server.js`
 
----
 # Arduino setup
 
 `npm install node-pixel`
@@ -36,22 +35,10 @@ To run script, open CMD, type:
 
 Plug in your arduino
 
-`interchange install git+https://github.com/ajfisher/node-pixel -a uno --firmata`
+`interchange install git+https://github.com/ajfisher/node-pixel -a nano --firmata`
 
 In **server.js** file, configure data pins, stripLength.
-
----
-# CS:GO Events Colors
-You can change colors of CS:GO events in **server.js** file, but remeber to use full HEX colors("#ffffff", not "#fff").
-
-- **On script start** - white color - #ffffff
-- **On main menu** - white color - #ffffff
-- **On warmup** - purple color - #ff00ff
-- **On freeezetime** - white color - #ffffff
-- **On round live** - green color - #00ff00
-- **On CT Win** - blue color -  #0000ff
-- **On TT Win** - yellow color - #ffff00
-- **On bomb plant** - red color - #ff0000
+You can also change colors of CS:GO events in **server.js** file, but remeber to use full HEX colors("#ffffff", not "#fff").
 
 ---
 # Problems
